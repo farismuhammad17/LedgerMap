@@ -19,6 +19,12 @@
             <option value="loan">Loan</option>
         </select>
         <button id="addBtn" class="btn-primary">+ Add New Entry</button>
+
+        <div style="margin-left: auto; display: flex; gap: 8px;">
+            <button id="exportBtn">Export JSON</button>
+            <button id="importBtn">Import JSON</button>
+            <input type="file" id="importFile" accept=".json" style="display: none;" />
+        </div>
     </div>
 
     <div id="entriesContainer"></div>
@@ -94,5 +100,6 @@
     </template>
 
     <script defer src="scripts/inputs.js"></script>
+    <script defer src="scripts/ports.js"></script>
 </body>
 </html>

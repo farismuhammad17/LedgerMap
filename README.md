@@ -11,4 +11,6 @@ LedgerMap is a desktop financial visualization tool built with Electron. It help
 * **Singular Expenses:** Log one-off purchases.
 * **Loan Tracking:** Keep tabs on loans and see how they impact your overall financial timeline.
 * **Toggle inputs:** Include or exclude values to see how they affect the values.
+* **Remembers state:** The program remembers your inputs (stored in `localStorage`) even after closing.
+* **Import/Export:** Inputs can be stashed away as JSON data which can be imported back in.
 * **Cross-Platform:** Uses Electron, thus compatible on any OS.
