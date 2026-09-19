@@ -7,6 +7,21 @@ body {
     overflow: hidden;
 }
 
+#main-container {
+    display: flex;
+    height: calc(100vh - 50px);
+    width: 100vw;
+}
+
+.canvas-wrapper {
+    flex-grow: 1;
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* Canvas */
+
 canvas {
     background: #18181b;
     cursor: grab;
@@ -19,11 +34,7 @@ canvas:active {
     cursor: grabbing;
 }
 
-#main-container {
-    display: flex;
-    height: calc(100vh - 50px);
-    width: 100vw;
-}
+/* Sidebar */
 
 #entries-sidebar {
     width: 280px;
@@ -41,33 +52,19 @@ canvas:active {
     color: #f4f4f5;
 }
 
+.sidebar-empty-msg {
+    font-size: 12px;
+    color: #71717a;
+    margin: 0;
+}
+
+/* Toggles */
+
 #toggleList {
     margin-top: 15px;
     display: flex;
     flex-direction: column;
     gap: 10px;
-}
-
-.entry-toggle-label {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 13px;
-    cursor: pointer;
-    color: #d4d4d8;
-}
-
-.canvas-wrapper {
-    flex-grow: 1;
-    position: relative;
-    height: 100%;
-    overflow: hidden;
-}
-
-.sidebar-empty-msg {
-    font-size: 12px;
-    color: #71717a;
-    margin: 0;
 }
 
 .entry-toggle-label {

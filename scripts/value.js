@@ -1,3 +1,8 @@
+let dailyBalances = {};
+let simulationBuiltFor = '';
+let simMinDay = -200;
+let simMaxDay = 1000;
+
 document.addEventListener('DOMContentLoaded', () => {
     const toggleList = document.getElementById('toggleList');
     const template = document.getElementById('template-sidebar-item');
@@ -20,7 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const checkbox = clone.querySelector('.entry-toggle');
             checkbox.dataset.name = e.name;
 
-            // When toggled, invalidate simulation cache and redraw graph instantly
             checkbox.addEventListener('change', () => {
                 simulationBuiltFor = '';
                 draw();
@@ -36,12 +40,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-let dailyBalances = {};
-let simulationBuiltFor = '';
-let simMinDay = -200;
-let simMaxDay = 1000;
+// Simulation Helpers
 
-// Helper to get current checkbox states from the DOM sidebar
 function getDisabledEntryNames() {
     const checkboxes = document.querySelectorAll('.entry-toggle');
     const disabled = new Set();
@@ -57,11 +57,9 @@ function ensureSimulation(maxNeededDay) {
     const entriesJson = localStorage.getItem('ledgerEntries') || '[]';
     const disabledEntries = getDisabledEntryNames();
 
-    // Create a unique signature combining entries and their current toggle states
     const toggleStateStr = Array.from(disabledEntries).join(',');
     const cacheKey = entriesJson + '|' + toggleStateStr;
 
-    // Re-run simulation if entries/toggles changed or if we scrolled past our simulated window
     if (cacheKey !== simulationBuiltFor || maxNeededDay > simMaxDay || simMinDay > -200) {
         if (cacheKey !== simulationBuiltFor) {
             dailyBalances = {};
@@ -74,25 +72,22 @@ function ensureSimulation(maxNeededDay) {
 
         const entries = JSON.parse(entriesJson);
 
-        // Initialize loan states
         let loansState = entries
             .filter(e => e.type === 'loan' && !disabledEntries.has(e.name))
             .map(e => ({
                 name: e.name,
                 principal: parseFloat(e.principal) || 0,
-                rate: parseFloat(e.rate) || 0,         // Monthly rate percentage
-                payment: parseFloat(e.payment) || 0,   // Monthly payment amount
+                rate: parseFloat(e.rate) || 0,
+                payment: parseFloat(e.payment) || 0,
                 start: parseInt(e.start) || 0,
                 active: false
             }));
 
         let runningBalance = 0;
 
-        // Simulate day-by-day from simMinDay to simMaxDay
         for (let d = simMinDay; d <= simMaxDay; d++) {
             let dailyChange = 0;
 
-            // Process Recurring & One-Time Entries
             entries.forEach(e => {
                 if (disabledEntries.has(e.name)) return;
 
@@ -112,7 +107,6 @@ function ensureSimulation(maxNeededDay) {
 
             runningBalance += dailyChange;
 
-            // Process Loans (Interest accrual & monthly payments)
             loansState.forEach(loan => {
                 if (d === loan.start) {
                     loan.active = true;
@@ -128,7 +122,6 @@ function ensureSimulation(maxNeededDay) {
                 }
             });
 
-            // Net Worth = Cash Balance minus Total Remaining Loan Liabilities
             let totalLoanLiability = loansState.reduce((sum, l) => sum + (l.active ? l.principal : 0), 0);
             dailyBalances[d] = runningBalance - totalLoanLiability;
         }

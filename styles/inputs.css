@@ -7,6 +7,15 @@ body {
     margin: auto;
 }
 
+.back-btn {
+    margin-bottom: 20px;
+    display: inline-block;
+    text-decoration: none;
+    color: #10b981;
+}
+
+/* Containers */
+
 .top-bar {
     background: #18181b;
     border: 1px solid #3f3f46;
@@ -18,27 +27,50 @@ body {
     border-radius: 6px;
 }
 
-details {
+.entry-accordion {
     background: #18181b;
     border: 1px solid #3f3f46;
-    margin-bottom: 10px;
-    padding: 10px;
     border-radius: 6px;
+    margin-bottom: 12px;
+    padding: 10px 15px;
+    color: #e0e0e0;
 }
+
+.entry-content-wrapper {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #27272a;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Accordion */
 
 summary {
     cursor: pointer;
-    font-weight: bold;
+    font-weight: 600;
+    font-size: 14px;
+    outline: none;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
     color: #10b981;
 }
 
-.row {
-    display: flex;
-    gap: 10px;
-    margin-top: 12px;
-    align-items: center;
-    flex-wrap: wrap;
+.entry-accordion summary:hover {
+    color: #10b981;
 }
+
+.entry-type-badge {
+    color: #a1a1aa;
+    font-size: 12px;
+    text-transform: uppercase;
+    font-family: monospace;
+}
+
+/* Form Elements */
 
 input, select {
     background: #27272a;
@@ -48,6 +80,28 @@ input, select {
     border-radius: 4px;
     font-family: monospace;
 }
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 12px;
+    align-items: center;
+}
+
+.inline-group {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+
+.inline-label {
+    font-size: 0.8rem;
+    color: #a1a1aa;
+    user-select: none;
+}
+
+/* Buttons */
 
 button {
     background: #27272a;
@@ -63,12 +117,40 @@ button:hover {
     background: #3f3f46;
 }
 
+.btn-primary {
+    background: #10b981;
+    color: #000;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 14px;
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+}
+
+.btn-primary:hover {
+    opacity: 0.85;
+}
+
+.btn-save {
+    padding: 10px 20px;
+    margin-top: 15px;
+}
+
 .delete-btn {
     background: #7f1d1d;
     border-color: #991b1b;
     color: #fca5a5;
 }
 
-.delete-btn:hover { background: #991b1b; }
+.delete-btn:hover {
+    background: #991b1b;
+}
 
-.back-btn { margin-bottom: 20px; display: inline-block; text-decoration: none; color: #10b981; }
+/* Utilities */
+
+.w-45 { width: 45px; }
+.w-50 { width: 50px; }
+.w-80 { width: 80px; }
+.w-85 { width: 85px; }
+.w-90 { width: 90px; }

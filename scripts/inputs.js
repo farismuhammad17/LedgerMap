@@ -1,65 +1,19 @@
 document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('addBtn').addEventListener('click', addEntry);
-    document.getElementById('saveBtn').addEventListener('click', saveData);
+    const addBtn = document.getElementById('addBtn');
+    const saveBtn = document.getElementById('saveBtn');
 
-    try {
-        const saved = JSON.parse(localStorage.getItem('ledgerEntries') || '[]');
-        saved.forEach(entry => createEntryElement(entry.type, entry));
-    } catch (e) {
-        console.error("Failed to load saved ledger entries:", e);
-    }
+    if (addBtn) addBtn.addEventListener('click', addEntry);
+    if (saveBtn) saveBtn.addEventListener('click', saveData);
+
+    loadSavedEntries();
 });
+
+// Event Handlers
 
 function addEntry() {
     const select = document.getElementById('entryTypeSelect');
     if (!select) return;
     createEntryElement(select.value, null);
-}
-
-function createEntryElement(type, data) {
-    const container = document.getElementById('entriesContainer');
-    const template = document.getElementById(`template-${type}`);
-
-    if (!container || !template) return;
-
-    const details = document.createElement('details');
-    details.open = true;
-    details.dataset.type = type;
-
-    let title = data?.name || `New ${type.charAt(0).toUpperCase() + type.slice(1)}`;
-    const clone = template.content.cloneNode(true);
-
-    if (data) {
-        const nameInput = clone.querySelector('.fieldName');
-        if (nameInput) nameInput.value = data.name || '';
-
-        if (type === 'recurring') {
-            clone.querySelector('.fieldVal').value = data.val ?? '';
-            clone.querySelector('.fieldFreqNum').value = data.freqNum ?? 1;
-            clone.querySelector('.fieldFreqUnit').value = data.freqUnit ?? 'months';
-            clone.querySelector('.fieldStart').value = data.start ?? 0;
-        } else if (type === 'once') {
-            clone.querySelector('.fieldVal').value = data.val ?? '';
-            clone.querySelector('.fieldDay').value = data.day ?? 0;
-        } else if (type === 'loan') {
-            clone.querySelector('.fieldPrincipal').value = data.principal ?? '';
-            clone.querySelector('.fieldRate').value = data.rate ?? '';
-            clone.querySelector('.fieldRateUnit').value = data.rateUnit ?? 'monthly';
-            clone.querySelector('.fieldPayment').value = data.payment ?? '';
-            clone.querySelector('.fieldPayFreqNum').value = data.payFreqNum ?? 1;
-            clone.querySelector('.fieldPayFreqUnit').value = data.payFreqUnit ?? 'months';
-            clone.querySelector('.fieldStart').value = data.start ?? 0;
-        }
-    }
-
-    const deleteBtn = clone.querySelector('.delete-btn');
-    if (deleteBtn) {
-        deleteBtn.addEventListener('click', () => details.remove());
-    }
-
-    details.innerHTML = `<summary>[${type.toUpperCase()}] <span class="summary-title">${title}</span></summary>`;
-    details.appendChild(clone);
-    container.appendChild(details);
 }
 
 function updateSummary(input) {
@@ -111,4 +65,69 @@ function saveData() {
 
     localStorage.setItem('ledgerEntries', JSON.stringify(entries));
     window.location.href = 'index.html';
+}
+
+// Core Functions
+
+function loadSavedEntries() {
+    try {
+        const saved = JSON.parse(localStorage.getItem('ledgerEntries') || '[]');
+        saved.forEach(entry => createEntryElement(entry.type, entry));
+    } catch (e) {
+        console.error("Failed to load saved ledger entries:", e);
+    }
+}
+
+function createEntryElement(type, data) {
+    const container = document.getElementById('entriesContainer');
+    const detailsTemplate = document.getElementById('template-entry-details');
+    const innerTemplate = document.getElementById(`template-${type}`);
+
+    if (!container || !detailsTemplate || !innerTemplate) return;
+
+    const detailsClone = detailsTemplate.content.cloneNode(true);
+    const details = detailsClone.querySelector('details');
+    details.dataset.type = type;
+
+    const title = data?.name || `New ${type.charAt(0).toUpperCase() + type.slice(1)}`;
+    details.querySelector('.entry-type-badge').textContent = `[${type}]`;
+    details.querySelector('.summary-title').textContent = title;
+
+    const contentClone = innerTemplate.content.cloneNode(true);
+
+    if (data) {
+        const nameInput = contentClone.querySelector('.fieldName');
+        if (nameInput) nameInput.value = data.name || '';
+
+        if (type === 'recurring') {
+            contentClone.querySelector('.fieldVal').value = data.val ?? '';
+            contentClone.querySelector('.fieldFreqNum').value = data.freqNum ?? 1;
+            contentClone.querySelector('.fieldFreqUnit').value = data.freqUnit ?? 'months';
+            contentClone.querySelector('.fieldStart').value = data.start ?? 0;
+        } else if (type === 'once') {
+            contentClone.querySelector('.fieldVal').value = data.val ?? '';
+            contentClone.querySelector('.fieldDay').value = data.day ?? 0;
+        } else if (type === 'loan') {
+            contentClone.querySelector('.fieldPrincipal').value = data.principal ?? '';
+            contentClone.querySelector('.fieldRate').value = data.rate ?? '';
+            contentClone.querySelector('.fieldRateUnit').value = data.rateUnit ?? 'monthly';
+            contentClone.querySelector('.fieldPayment').value = data.payment ?? '';
+            contentClone.querySelector('.fieldPayFreqNum').value = data.payFreqNum ?? 1;
+            contentClone.querySelector('.fieldPayFreqUnit').value = data.payFreqUnit ?? 'months';
+            contentClone.querySelector('.fieldStart').value = data.start ?? 0;
+        }
+    }
+
+    const deleteBtn = contentClone.querySelector('.delete-btn');
+    if (deleteBtn) {
+        deleteBtn.addEventListener('click', () => details.remove());
+    }
+
+    const nameInputField = contentClone.querySelector('.fieldName');
+    if (nameInputField) {
+        nameInputField.addEventListener('input', (e) => updateSummary(e.target));
+    }
+
+    details.querySelector('.entry-content-wrapper').appendChild(contentClone);
+    container.appendChild(details);
 }
