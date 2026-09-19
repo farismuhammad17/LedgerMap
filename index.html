@@ -6,7 +6,7 @@
 
         <link rel="stylesheet" href="styles/main.css" />
         <link rel="stylesheet" href="styles/control.css" />
-        <link rel="stylesheet" href="styles/graph.css" />
+        <link rel="stylesheet" href="styles/common.css" />
     </head>
     <body>
         <div id="control-bar">
@@ -30,7 +30,23 @@
             </div>
         </div>
 
-        <canvas id="graphCanvas"></canvas>
+        <div id="main-container">
+            <div id="entries-sidebar">
+                <h3>Active Layers</h3>
+                <div id="toggleList"></div>
+            </div>
+
+            <div class="canvas-wrapper">
+                <canvas id="graphCanvas"></canvas>
+            </div>
+        </div>
+
+        <template id="template-sidebar-item">
+            <label class="entry-toggle-label">
+                <input type="checkbox" class="entry-toggle" checked />
+                <span class="entry-toggle-text"></span>
+            </label>
+        </template>
 
         <script defer src="scripts/value.js"></script>
         <script defer src="scripts/graph.js"></script>

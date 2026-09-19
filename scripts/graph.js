@@ -24,8 +24,9 @@ timeScaleSelect.addEventListener('change', (e) => {
 
 // Auto-resize canvas to fit remaining space below control bar
 function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight - document.getElementById('control-bar').offsetHeight;
+    const wrapper = canvas.parentElement;
+    canvas.width = wrapper.clientWidth;
+    canvas.height = wrapper.clientHeight;
     draw();
 }
 window.addEventListener('resize', resizeCanvas);
