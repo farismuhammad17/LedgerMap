@@ -1,12 +1,11 @@
 {
     "name": "LedgerMap",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Forecasts a graph of costs and expenses",
     "license": "MIT",
     "main": "main.js",
     "scripts": {
-        "start": "electron .",
-        "build": "electron-builder"
+        "start": "electron ."
     },
     "devDependencies": {
         "electron": "^44.4.3",
