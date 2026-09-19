@@ -58,7 +58,26 @@
                 </select>
             </div>
 
-            <input type="number" placeholder="Start Day" class="fieldStart w-90" value="0" />
+            <div class="inline-group">
+                <span class="inline-label">Start</span>
+                <input type="number" class="fieldStartNum w-50" value="0" min="0" />
+                <select class="fieldStartUnit w-90">
+                    <option value="days" selected>Days</option>
+                    <option value="months">Months</option>
+                    <option value="years">Years</option>
+                </select>
+            </div>
+
+            <div class="inline-group">
+                <span class="inline-label">End</span>
+                <input type="number" placeholder="Optional" class="fieldEndNum w-50" min="0" />
+                <select class="fieldEndUnit w-90">
+                    <option value="days" selected>Days</option>
+                    <option value="months">Months</option>
+                    <option value="years">Years</option>
+                </select>
+            </div>
+
             <button class="delete-btn">Delete</button>
         </div>
     </template>
@@ -94,7 +113,26 @@
                 </select>
             </div>
 
-            <input type="number" placeholder="Start Day" class="fieldStart w-80" value="0" />
+            <div class="inline-group">
+                <span class="inline-label">Start</span>
+                <input type="number" class="fieldStartNum w-45" value="0" min="0" />
+                <select class="fieldStartUnit w-85">
+                    <option value="days" selected>Days</option>
+                    <option value="months">Months</option>
+                    <option value="years">Years</option>
+                </select>
+            </div>
+
+            <div class="inline-group">
+                <span class="inline-label">End</span>
+                <input type="number" placeholder="Optional" class="fieldEndNum w-45" min="0" />
+                <select class="fieldEndUnit w-85">
+                    <option value="days" selected>Days</option>
+                    <option value="months">Months</option>
+                    <option value="years">Years</option>
+                </select>
+            </div>
+
             <button class="delete-btn">Delete</button>
         </div>
     </template>

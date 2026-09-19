@@ -24,6 +24,18 @@ function updateSummary(input) {
     }
 }
 
+// Helper to convert value + unit into absolute days
+function convertToDays(val, unit) {
+    const num = parseFloat(val) || 0;
+    switch (unit) {
+        case 'weeks': return Math.round(num * 7);
+        case 'months': return Math.round(num * 30);
+        case 'years': return Math.round(num * 365);
+        case 'days':
+        default: return Math.round(num);
+    }
+}
+
 function saveData() {
     const entries = [];
     const detailsNodes = document.querySelectorAll('#entriesContainer details');
@@ -33,13 +45,23 @@ function saveData() {
         const getVal = (selector) => details.querySelector(selector)?.value || '';
 
         if (type === 'recurring') {
+            const rawStart = getVal('.fieldStartNum');
+            const startUnit = getVal('.fieldStartUnit');
+            const rawEnd = getVal('.fieldEndNum');
+            const endUnit = getVal('.fieldEndUnit');
+
             entries.push({
                 type: 'recurring',
                 name: getVal('.fieldName'),
                 val: parseFloat(getVal('.fieldVal')) || 0,
                 freqNum: parseInt(getVal('.fieldFreqNum')) || 1,
                 freqUnit: getVal('.fieldFreqUnit'),
-                start: parseInt(getVal('.fieldStart')) || 0
+                start: convertToDays(rawStart, startUnit),
+                startNum: rawStart,
+                startUnit: startUnit,
+                end: rawEnd !== '' ? convertToDays(rawEnd, endUnit) : null,
+                endNum: rawEnd,
+                endUnit: endUnit
             });
         } else if (type === 'once') {
             entries.push({
@@ -49,6 +71,11 @@ function saveData() {
                 day: parseInt(getVal('.fieldDay')) || 0
             });
         } else if (type === 'loan') {
+            const rawStart = getVal('.fieldStartNum');
+            const startUnit = getVal('.fieldStartUnit');
+            const rawEnd = getVal('.fieldEndNum');
+            const endUnit = getVal('.fieldEndUnit');
+
             entries.push({
                 type: 'loan',
                 name: getVal('.fieldName'),
@@ -58,7 +85,12 @@ function saveData() {
                 payment: parseFloat(getVal('.fieldPayment')) || 0,
                 payFreqNum: parseInt(getVal('.fieldPayFreqNum')) || 1,
                 payFreqUnit: getVal('.fieldPayFreqUnit'),
-                start: parseInt(getVal('.fieldStart')) || 0
+                start: convertToDays(rawStart, startUnit),
+                startNum: rawStart,
+                startUnit: startUnit,
+                end: rawEnd !== '' ? convertToDays(rawEnd, endUnit) : null,
+                endNum: rawEnd,
+                endUnit: endUnit
             });
         }
     });
@@ -103,7 +135,14 @@ function createEntryElement(type, data) {
             contentClone.querySelector('.fieldVal').value = data.val ?? '';
             contentClone.querySelector('.fieldFreqNum').value = data.freqNum ?? 1;
             contentClone.querySelector('.fieldFreqUnit').value = data.freqUnit ?? 'months';
-            contentClone.querySelector('.fieldStart').value = data.start ?? 0;
+
+            contentClone.querySelector('.fieldStartNum').value = data.startNum ?? data.start ?? 0;
+            contentClone.querySelector('.fieldStartUnit').value = data.startUnit ?? 'days';
+
+            if (data.endNum !== undefined && data.endNum !== null) {
+                contentClone.querySelector('.fieldEndNum').value = data.endNum;
+                contentClone.querySelector('.fieldEndUnit').value = data.endUnit ?? 'days';
+            }
         } else if (type === 'once') {
             contentClone.querySelector('.fieldVal').value = data.val ?? '';
             contentClone.querySelector('.fieldDay').value = data.day ?? 0;
@@ -114,7 +153,14 @@ function createEntryElement(type, data) {
             contentClone.querySelector('.fieldPayment').value = data.payment ?? '';
             contentClone.querySelector('.fieldPayFreqNum').value = data.payFreqNum ?? 1;
             contentClone.querySelector('.fieldPayFreqUnit').value = data.payFreqUnit ?? 'months';
-            contentClone.querySelector('.fieldStart').value = data.start ?? 0;
+
+            contentClone.querySelector('.fieldStartNum').value = data.startNum ?? data.start ?? 0;
+            contentClone.querySelector('.fieldStartUnit').value = data.startUnit ?? 'days';
+
+            if (data.endNum !== undefined && data.endNum !== null) {
+                contentClone.querySelector('.fieldEndNum').value = data.endNum;
+                contentClone.querySelector('.fieldEndUnit').value = data.endUnit ?? 'days';
+            }
         }
     }
 

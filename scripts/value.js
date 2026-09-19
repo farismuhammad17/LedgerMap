@@ -53,6 +53,18 @@ function getDisabledEntryNames() {
     return disabled;
 }
 
+// Helper to calculate interval in days from number + unit
+function getFrequencyInDays(num, unit) {
+    const n = parseInt(num) || 1;
+    switch (unit) {
+        case 'weeks': return n * 7;
+        case 'months': return n * 30;
+        case 'years': return n * 365;
+        case 'days':
+        default: return n;
+    }
+}
+
 function ensureSimulation(maxNeededDay) {
     const entriesJson = localStorage.getItem('ledgerEntries') || '[]';
     const disabledEntries = getDisabledEntryNames();
@@ -63,6 +75,8 @@ function ensureSimulation(maxNeededDay) {
     if (cacheKey !== simulationBuiltFor || maxNeededDay > simMaxDay || simMinDay > -200) {
         if (cacheKey !== simulationBuiltFor) {
             dailyBalances = {};
+            dailyGains = {};
+            dailyLosses = {};
             simulationBuiltFor = cacheKey;
             simMinDay = -200;
             simMaxDay = Math.max(1000, maxNeededDay + 200);
@@ -78,29 +92,45 @@ function ensureSimulation(maxNeededDay) {
                 name: e.name,
                 principal: parseFloat(e.principal) || 0,
                 rate: parseFloat(e.rate) || 0,
+                rateUnit: e.rateUnit || 'monthly',
                 payment: parseFloat(e.payment) || 0,
+                payFreqNum: parseInt(e.payFreqNum) || 1,
+                payFreqUnit: e.payFreqUnit || 'months',
                 start: parseInt(e.start) || 0,
+                end: e.end !== null && e.end !== undefined ? parseInt(e.end) : null,
                 active: false
             }));
 
         let runningBalance = 0;
+        let totalGainSoFar = 0;
+        let totalLossSoFar = 0;
 
         for (let d = simMinDay; d <= simMaxDay; d++) {
             let dailyChange = 0;
+            let dayGain = 0;
+            let dayLoss = 0;
 
             entries.forEach(e => {
                 if (disabledEntries.has(e.name)) return;
 
                 if (e.type === 'recurring') {
                     const start = parseInt(e.start) || 0;
-                    const freq = parseInt(e.freq) || 30;
-                    if (d >= start && (d - start) % freq === 0) {
-                        dailyChange += parseFloat(e.val) || 0;
+                    const end = e.end !== null && e.end !== undefined ? parseInt(e.end) : null;
+                    const freq = getFrequencyInDays(e.freqNum, e.freqUnit);
+
+                    if (d >= start && (end === null || d <= end) && (d - start) % freq === 0) {
+                        const val = parseFloat(e.val) || 0;
+                        dailyChange += val;
+                        if (val > 0) dayGain += val;
+                        else if (val < 0) dayLoss += val;
                     }
                 } else if (e.type === 'once') {
                     const day = parseInt(e.day) || 0;
                     if (d === day) {
-                        dailyChange += parseFloat(e.val) || 0;
+                        const val = parseFloat(e.val) || 0;
+                        dailyChange += val;
+                        if (val > 0) dayGain += val;
+                        else if (val < 0) dayLoss += val;
                     }
                 }
             });
@@ -111,19 +141,42 @@ function ensureSimulation(maxNeededDay) {
                 if (d === loan.start) {
                     loan.active = true;
                 }
+                // Stop loan if it hits its end day or principal drops to 0
+                if (loan.end !== null && d >= loan.end) {
+                    loan.active = false;
+                }
+
                 if (loan.active && loan.principal > 0) {
-                    const dailyInterestRate = (loan.rate / 100) / 30;
+                    let dailyInterestRate = 0;
+                    if (loan.rateUnit === 'yearly') {
+                        dailyInterestRate = (loan.rate / 100) / 365;
+                    } else {
+                        dailyInterestRate = (loan.rate / 100) / 30;
+                    }
                     loan.principal += loan.principal * dailyInterestRate;
 
-                    if ((d - loan.start) > 0 && (d - loan.start) % 30 === 0) {
+                    const payFreq = getFrequencyInDays(loan.payFreqNum, loan.payFreqUnit);
+
+                    if ((d - loan.start) > 0 && (d - loan.start) % payFreq === 0) {
                         loan.principal -= loan.payment;
                         if (loan.principal < 0) loan.principal = 0;
+                        // Loan payments count as a cash outflow (loss)
+                        dayLoss -= loan.payment;
                     }
                 }
             });
 
+            // Accumulate total gains and losses from day 0 onwards
+            if (d >= 0) {
+                totalGainSoFar += dayGain;
+                totalLossSoFar += dayLoss; // accumulated negative values
+            }
+
             let totalLoanLiability = loansState.reduce((sum, l) => sum + (l.active ? l.principal : 0), 0);
+
             dailyBalances[d] = runningBalance - totalLoanLiability;
+            dailyGains[d] = totalGainSoFar;
+            dailyLosses[d] = totalLossSoFar;
         }
     }
 }

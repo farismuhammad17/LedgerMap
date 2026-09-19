@@ -118,7 +118,14 @@ function draw() {
         ctx.fillRect(x, barY, barWidth, barHeight);
 
         if (mouseX >= x && mouseX <= x + barWidth && mouseY >= 0 && mouseY <= height) {
-            hoveredBar = { day, val, x, barY };
+            hoveredBar = {
+                day,
+                val,
+                gain: dailyGains[day] || 0,
+                loss: dailyLosses[day] || 0,
+                x,
+                barY
+            };
         }
     }
 
@@ -148,10 +155,18 @@ function drawTooltip(hoveredBar, middleY, width, height) {
 
     const textDate = `Day: ${hoveredBar.day}`;
     const textVal = `Total: ${hoveredBar.val.toFixed(2)}`;
+    const textGain = `+${(hoveredBar.gain || 0).toFixed(2)}`;
+    const textLoss = `${(hoveredBar.loss || 0).toFixed(2)}`; // already negative
 
     ctx.font = '12px sans-serif';
-    const boxWidth = Math.max(ctx.measureText(textDate).width, ctx.measureText(textVal).width) + 20;
-    const boxHeight = 45;
+    const maxTextWidth = Math.max(
+        ctx.measureText(textDate).width,
+        ctx.measureText(textVal).width,
+        ctx.measureText(textGain).width,
+        ctx.measureText(textLoss).width
+    );
+    const boxWidth = maxTextWidth + 20;
+    const boxHeight = 75; // Increased height for 4 lines of text
 
     let boxX = hoveredBar.x + 15;
     let boxY = mouseY - 50;
@@ -163,8 +178,19 @@ function drawTooltip(hoveredBar, middleY, width, height) {
     ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
     ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
 
+    // Date
     ctx.fillStyle = '#e0e0e0';
     ctx.fillText(textDate, boxX + 10, boxY + 18);
+
+    // Total Balance
     ctx.fillStyle = hoveredBar.val >= 0 ? '#10b981' : '#ef4444';
-    ctx.fillText(textVal, boxX + 10, boxY + 35);
+    ctx.fillText(textVal, boxX + 10, boxY + 34);
+
+    // Total Gain
+    ctx.fillStyle = '#10b981';
+    ctx.fillText(textGain, boxX + 10, boxY + 50);
+
+    // Total Loss
+    ctx.fillStyle = '#ef4444';
+    ctx.fillText(textLoss, boxX + 10, boxY + 66);
 }
