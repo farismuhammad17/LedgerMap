@@ -5,6 +5,9 @@ on:
     tags:
       - 'v*' # Only trigger with version tag
 
+permissions:
+  contents: write
+
 jobs:
   release:
     runs-on: ${{ matrix.os }}
@@ -30,6 +33,5 @@ jobs:
         uses: samuelmeuli/action-electron-builder@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          release_preset: true
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
