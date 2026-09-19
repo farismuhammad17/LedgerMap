@@ -1,0 +1,22 @@
+body {
+    background: #121212;
+    color: #e0e0e0;
+    font-family: monospace;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+select {
+  border: 1px solid #ccc;
+  outline: none;
+}
+
+select:focus {
+  outline: none;
+  border-color: #000;
+}

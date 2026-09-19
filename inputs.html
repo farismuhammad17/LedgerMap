@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>LedgerMap - Manage Inputs</title>
+    <link rel="stylesheet" href="styles/inputs.css" />
+</head>
+<body>
+    <a href="index.html" class="back-btn">&lt;- Back to Graph</a>
+    <h2>Inputs</h2>
+
+    <div class="top-bar">
+        <label for="entryTypeSelect">Entry Type:</label>
+        <select id="entryTypeSelect">
+            <option value="recurring">Recurring Cash Flow</option>
+            <option value="once">One-Time Event</option>
+            <option value="loan">Loan / Liability</option>
+        </select>
+        <button id="addBtn" style="background: #10b981; color: #000; font-weight: bold;">+ Add New Entry</button>
+    </div>
+
+    <div id="entriesContainer"></div>
+
+    <br>
+    <button id="saveBtn" style="background: #10b981; color: #000; font-weight: bold; padding: 10px 20px;">Save All Inputs</button>
+
+    <!-- Templates -->
+    <template id="template-recurring">
+        <div class="row">
+            <input type="text" placeholder="Name (e.g. Salary)" class="fieldName" oninput="updateSummary(this)" />
+            <input type="number" placeholder="Value ($)" class="fieldVal" />
+
+            <div style="display: flex; gap: 4px; align-items: center;">
+                <span style="font-size: 0.8rem; color: #a1a1aa;">Every</span>
+                <input type="number" class="fieldFreqNum" value="1" min="1" style="width: 50px;" />
+                <select class="fieldFreqUnit" style="width: 90px;">
+                    <option value="days">Days</option>
+                    <option value="weeks">Weeks</option>
+                    <option value="months" selected>Months</option>
+                    <option value="years">Years</option>
+                </select>
+            </div>
+
+            <input type="number" placeholder="Start Day" class="fieldStart" value="0" style="width: 90px;" />
+            <button class="delete-btn">Delete</button>
+        </div>
+    </template>
+
+    <template id="template-once">
+        <div class="row">
+            <input type="text" placeholder="Name (e.g. Bonus)" class="fieldName" oninput="updateSummary(this)" />
+            <input type="number" placeholder="Value ($)" class="fieldVal" />
+            <input type="number" placeholder="On Day" class="fieldDay" value="0" style="width: 90px;" />
+            <button class="delete-btn">Delete</button>
+        </div>
+    </template>
+
+    <template id="template-loan">
+        <div class="row">
+            <input type="text" placeholder="Loan Name" class="fieldName" oninput="updateSummary(this)" />
+            <input type="number" placeholder="Principal ($)" class="fieldPrincipal" />
+            <input type="number" placeholder="Rate (%)" class="fieldRate" step="0.01" />
+            <select class="fieldRateUnit" style="width: 85px;">
+                <option value="monthly" selected>Monthly</option>
+                <option value="yearly">Yearly</option>
+            </select>
+            <input type="number" placeholder="Payment ($)" class="fieldPayment" />
+
+            <!-- Flexible Payment Frequency -->
+            <div style="display: flex; gap: 4px; align-items: center;">
+                <span style="font-size: 0.8rem; color: #a1a1aa;">Every</span>
+                <input type="number" class="fieldPayFreqNum" value="1" min="1" style="width: 45px;" />
+                <select class="fieldPayFreqUnit" style="width: 85px;">
+                    <option value="days">Days</option>
+                    <option value="weeks">Weeks</option>
+                    <option value="months" selected>Months</option>
+                    <option value="years">Years</option>
+                </select>
+            </div>
+
+            <input type="number" placeholder="Start Day" class="fieldStart" value="0" style="width: 80px;" />
+            <button class="delete-btn">Delete</button>
+        </div>
+    </template>
+
+    <script defer src="scripts/inputs.js"></script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+let dailyBalances = {};
+let simulationBuiltFor = '';
+let simMinDay = -200;
+let simMaxDay = 1000;
+
+function ensureSimulation(maxNeededDay) {
+    const entriesJson = localStorage.getItem('ledgerEntries') || '[]';
+
+    // Re-run simulation if entries changed or if we scrolled past our simulated window
+    if (entriesJson !== simulationBuiltFor || maxNeededDay > simMaxDay || simMinDay > -200) {
+        if (entriesJson !== simulationBuiltFor) {
+            dailyBalances = {};
+            simulationBuiltFor = entriesJson;
+            simMinDay = -200;
+            simMaxDay = Math.max(1000, maxNeededDay + 200);
+        } else if (maxNeededDay > simMaxDay) {
+            simMaxDay = maxNeededDay + 200;
+        }
+
+        const entries = JSON.parse(entriesJson);
+
+        // Initialize loan states
+        let loansState = entries
+            .filter(e => e.type === 'loan')
+            .map(e => ({
+                name: e.name,
+                principal: parseFloat(e.principal) || 0,
+                rate: parseFloat(e.rate) || 0,         // Monthly rate percentage
+                payment: parseFloat(e.payment) || 0,   // Monthly payment amount
+                start: parseInt(e.start) || 0,
+                active: false
+            }));
+
+        let runningBalance = 0;
+
+        // Simulate day-by-day from simMinDay to simMaxDay
+        for (let d = simMinDay; d <= simMaxDay; d++) {
+            let dailyChange = 0;
+
+            // Process Recurring & One-Time Entries
+            entries.forEach(e => {
+                if (e.type === 'recurring') {
+                    const start = parseInt(e.start) || 0;
+                    const freq = parseInt(e.freq) || 30;
+                    if (d >= start && (d - start) % freq === 0) {
+                        dailyChange += parseFloat(e.val) || 0;
+                    }
+                } else if (e.type === 'once') {
+                    const day = parseInt(e.day) || 0;
+                    if (d === day) {
+                        dailyChange += parseFloat(e.val) || 0;
+                    }
+                }
+            });
+
+            runningBalance += dailyChange;
+
+            // Process Loans (Interest accrual & monthly payments)
+            loansState.forEach(loan => {
+                if (d === loan.start) {
+                    loan.active = true;
+                }
+                if (loan.active && loan.principal > 0) {
+                    // Daily interest factor derived from monthly rate percentage
+                    const dailyInterestRate = (loan.rate / 100) / 30;
+                    loan.principal += loan.principal * dailyInterestRate;
+
+                    // Apply monthly payment every 30 days from start
+                    if ((d - loan.start) > 0 && (d - loan.start) % 30 === 0) {
+                        loan.principal -= loan.payment;
+                        if (loan.principal < 0) loan.principal = 0;
+                    }
+                }
+            });
+
+            // Net Worth = Cash Balance minus Total Remaining Loan Liabilities
+            let totalLoanLiability = loansState.reduce((sum, l) => sum + (l.active ? l.principal : 0), 0);
+            dailyBalances[d] = runningBalance - totalLoanLiability;
+        }
+    }
+}
+
+function getValueAt(day) {
+    const targetDay = Math.round(day);
+    ensureSimulation(targetDay);
+    return dailyBalances[targetDay] ?? 0;
+}

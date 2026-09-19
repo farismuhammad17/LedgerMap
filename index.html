@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Ledger Map</title>
+
+        <link rel="stylesheet" href="styles/main.css" />
+        <link rel="stylesheet" href="styles/control.css" />
+        <link rel="stylesheet" href="styles/graph.css" />
+    </head>
+    <body>
+        <div id="control-bar">
+            <a href="inputs.html"><button id="manageBtn">Manage Inputs</button></a>
+
+            <div class="control-group">
+                <label for="timeScale">Resolution:</label>
+                <select id="timeScale">
+                    <option value="daily">Daily</option>
+                    <option value="monthly">Monthly</option>
+                    <option value="yearly">Yearly</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="scrollMode">Scroll:</label>
+                <select id="scrollMode">
+                    <option value="vertical">Vertical</option>
+                    <option value="horizontal">Horizontal</option>
+                </select>
+            </div>
+        </div>
+
+        <canvas id="graphCanvas"></canvas>
+
+        <script defer src="scripts/value.js"></script>
+        <script defer src="scripts/graph.js"></script>
+    </body>
+</html>

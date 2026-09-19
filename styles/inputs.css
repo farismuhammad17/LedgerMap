@@ -1,0 +1,74 @@
+body {
+    background: #121212;
+    color: #e0e0e0;
+    font-family: monospace;
+    padding: 20px;
+    max-width: 850px;
+    margin: auto;
+}
+
+.top-bar {
+    background: #18181b;
+    border: 1px solid #3f3f46;
+    padding: 15px;
+    margin-bottom: 20px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    border-radius: 6px;
+}
+
+details {
+    background: #18181b;
+    border: 1px solid #3f3f46;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 6px;
+}
+
+summary {
+    cursor: pointer;
+    font-weight: bold;
+    color: #10b981;
+}
+
+.row {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+input, select {
+    background: #27272a;
+    color: #fff;
+    border: 1px solid #3f3f46;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-family: monospace;
+}
+
+button {
+    background: #27272a;
+    color: #e0e0e0;
+    border: 1px solid #3f3f46;
+    padding: 6px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: monospace;
+}
+
+button:hover {
+    background: #3f3f46;
+}
+
+.delete-btn {
+    background: #7f1d1d;
+    border-color: #991b1b;
+    color: #fca5a5;
+}
+
+.delete-btn:hover { background: #991b1b; }
+
+.back-btn { margin-bottom: 20px; display: inline-block; text-decoration: none; color: #10b981; }

@@ -1,0 +1,47 @@
+#control-bar {
+    background: #18181b;
+    border-bottom: 1px solid #3f3f46;
+    padding: 12px 15px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-shrink: 0;
+    font-family: monospace;
+}
+
+.control-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: #a1a1aa;
+}
+
+#control-bar select,
+#control-bar button,
+#control-bar a button {
+    background: #27272a;
+    color: #e0e0e0;
+    border: 1px solid #3f3f46;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: monospace;
+    font-size: 0.85rem;
+}
+
+#control-bar select:hover,
+#control-bar button:hover {
+    background: #3f3f46;
+}
+
+#manageBtn {
+    background: #10b981 !important;
+    color: #000 !important;
+    font-weight: bold;
+    border-color: #059669 !important;
+}
+
+#manageBtn:hover {
+    background: #34d399 !important;
+}
