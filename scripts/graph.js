@@ -3,8 +3,8 @@ const ctx = canvas.getContext('2d');
 const timeScaleSelect = document.getElementById('timeScale');
 const scrollModeSelect = document.getElementById('scrollMode');
 
-let viewStartDay = -50;
-let dayWidth = 15;
+let viewStartDay = -5;
+let dayWidth = 10;
 let verticalScale = 0.04;
 let timeStep = 1;
 let scrollMode = 'vertical';

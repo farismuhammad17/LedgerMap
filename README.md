@@ -1,8 +1,12 @@
-# Ledger Map
+<p align="center">
+    <img src="readme-assets/banner.png" width="60%" alt="Banner">
+</p>
 
 LedgerMap is a desktop financial visualization tool built with Electron. It helps you forecast and graph your cash flow by managing recurring payments, singular expenses, loans, etc.
 
-![Inputs](readme-assets/inputs-page.png)
+<p align="center">
+    <img src="readme-assets/inputs-page.png" width="75%" alt="Inputs Page Showcase">
+</p>
 
 ## Features
 
