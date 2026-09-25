@@ -18,3 +18,7 @@ LedgerMap is a desktop financial visualization tool built with Electron. It help
 * **Remembers state:** The program remembers your inputs (stored in `localStorage`) even after closing.
 * **Import/Export:** Inputs can be stashed away as JSON data which can be imported back in.
 * **Cross-Platform:** Uses Electron, thus compatible on any OS.
+
+---
+
+*This project is licensed under the MIT license. See [LICENSE](LICENSE) for more details.*

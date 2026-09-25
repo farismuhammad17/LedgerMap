@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="styles/inputs.css" />
 </head>
 <body>
-    <a href="index.html" class="back-btn">&lt;- Back to Graph</a>
+    <a id="saveBtn" class="back-btn">&lt;- Save Entries</a>
     <h2>Inputs</h2>
 
     <div class="top-bar">
@@ -29,14 +29,13 @@
 
     <div id="entriesContainer"></div>
 
-    <br>
-    <button id="saveBtn" class="btn-primary btn-save">Save All Inputs</button>
-
     <template id="template-entry-details">
         <details open class="entry-accordion">
-            <summary>
+            <summary class="entry-summary" style="">
                 <span class="entry-type-badge"></span>
-                <span class="summary-title"></span>
+                <span class="summary-title" style="flex-grow: 1;"></span>
+                <button class="move-up-btn" type="button" title="Move Up">▲</button>
+                <button class="move-down-btn" type="button" title="Move Down">▼</button>
             </summary>
             <div class="entry-content-wrapper"></div>
         </details>

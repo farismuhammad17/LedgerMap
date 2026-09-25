@@ -12,6 +12,7 @@ body {
     display: inline-block;
     text-decoration: none;
     color: #10b981;
+    cursor: pointer;
 }
 
 /* Containers */
@@ -25,6 +26,12 @@ body {
     gap: 12px;
     align-items: center;
     border-radius: 6px;
+}
+
+.entry-summary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .entry-accordion {
@@ -130,11 +137,6 @@ button:hover {
 
 .btn-primary:hover {
     opacity: 0.85;
-}
-
-.btn-save {
-    padding: 10px 20px;
-    margin-top: 15px;
 }
 
 .delete-btn {

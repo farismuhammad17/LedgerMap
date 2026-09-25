@@ -169,6 +169,28 @@ function createEntryElement(type, data) {
         deleteBtn.addEventListener('click', () => details.remove());
     }
 
+    // Move Up / Move Down Handlers (Scoped properly here!)
+    const moveUpBtn = details.querySelector('.move-up-btn');
+    const moveDownBtn = details.querySelector('.move-down-btn');
+
+    if (moveUpBtn) {
+        moveUpBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (details.previousElementSibling) {
+                container.insertBefore(details, details.previousElementSibling);
+            }
+        });
+    }
+
+    if (moveDownBtn) {
+        moveDownBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (details.nextElementSibling) {
+                container.insertBefore(details.nextElementSibling, details);
+            }
+        });
+    }
+
     const nameInputField = contentClone.querySelector('.fieldName');
     if (nameInputField) {
         nameInputField.addEventListener('input', (e) => updateSummary(e.target));
