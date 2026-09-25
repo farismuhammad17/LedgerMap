@@ -1,6 +1,6 @@
 {
     "name": "LedgerMap",
-    "version": "1.4.0",
+    "version": "1.4.1",
     "author": "Faris Muhammad",
     "description": "A desktop financial simulation engine that graphs projected values using given incomes and expenses.",
     "keywords": ["ledger", "finance", "simulation", "graph", "electron", "HTML", "CSS", "JavaScript"],

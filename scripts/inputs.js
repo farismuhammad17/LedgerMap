@@ -64,11 +64,16 @@ function saveData() {
                 endUnit: endUnit
             });
         } else if (type === 'once') {
+            const rawDay = getVal('.fieldDayNum');
+            const dayUnit = getVal('.fieldDayUnit');
+
             entries.push({
                 type: 'once',
                 name: getVal('.fieldName'),
                 val: parseFloat(getVal('.fieldVal')) || 0,
-                day: parseInt(getVal('.fieldDay')) || 0
+                day: convertToDays(rawDay, dayUnit),
+                dayNum: rawDay,
+                dayUnit: dayUnit
             });
         } else if (type === 'loan') {
             const rawStart = getVal('.fieldStartNum');
@@ -145,7 +150,8 @@ function createEntryElement(type, data) {
             }
         } else if (type === 'once') {
             contentClone.querySelector('.fieldVal').value = data.val ?? '';
-            contentClone.querySelector('.fieldDay').value = data.day ?? 0;
+            contentClone.querySelector('.fieldDayNum').value = data.dayNum ?? data.day ?? 0;
+            contentClone.querySelector('.fieldDayUnit').value = data.dayUnit ?? 'days';
         } else if (type === 'loan') {
             contentClone.querySelector('.fieldPrincipal').value = data.principal ?? '';
             contentClone.querySelector('.fieldRate').value = data.rate ?? '';
@@ -169,7 +175,7 @@ function createEntryElement(type, data) {
         deleteBtn.addEventListener('click', () => details.remove());
     }
 
-    // Move Up / Move Down Handlers (Scoped properly here!)
+    // Move Up / Move Down Handlers
     const moveUpBtn = details.querySelector('.move-up-btn');
     const moveDownBtn = details.querySelector('.move-down-btn');
 

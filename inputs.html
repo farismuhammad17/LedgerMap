@@ -83,9 +83,19 @@
 
     <template id="template-once">
         <div class="row">
-            <input type="text" placeholder="Name (e.g. Bonus)" class="fieldName" oninput="updateSummary(this)" />
+            <input type="text" placeholder="Name" class="fieldName" oninput="updateSummary(this)" />
             <input type="number" placeholder="Value" class="fieldVal" />
-            <input type="number" placeholder="On Day" class="fieldDay w-90" value="0" />
+
+            <div class="inline-group">
+                <span class="inline-label">On</span>
+                <input type="number" class="fieldDayNum w-50" value="0" min="0" />
+                <select class="fieldDayUnit w-90">
+                    <option value="days" selected>Days</option>
+                    <option value="months">Months</option>
+                    <option value="years">Years</option>
+                </select>
+            </div>
+
             <button class="delete-btn">Delete</button>
         </div>
     </template>
