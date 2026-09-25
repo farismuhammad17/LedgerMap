@@ -3,7 +3,9 @@ const { autoUpdater } = require('electron-updater');
 const path = require('path');
 
 autoUpdater.autoDownload = true;
-autoUpdater.autoInstallOnAppQuit = true;
+autoUpdater.autoInstallOnAppQuit = false;
+
+let updateDownloaded = false;
 
 const createWindow = () => {
     const win = new BrowserWindow({
@@ -18,6 +20,15 @@ const createWindow = () => {
 
     win.removeMenu(); // Removes the menubar
     win.loadFile('index.html');
+
+    // Update on close
+    win.on('close', (e) => {
+        if (updateDownloaded) {
+            // Stop the app from closing immediately
+            e.preventDefault();
+            autoUpdater.quitAndInstall(false, true);
+        }
+    });
 };
 
 app.whenReady().then(() => {
@@ -28,4 +39,8 @@ app.whenReady().then(() => {
     });
 
     autoUpdater.checkForUpdates();
+});
+
+autoUpdater.on('update-downloaded', () => {
+    updateDownloaded = true;
 });
